@@ -63,7 +63,7 @@ app.post('/converter',async(req,res)=>{
 
   const {valorDolar}=calcularDolar(Number(valorReal),Number(cotacao));
   try {
-      const [rows] = await db.execute('INSERT INTO `conversoes` (`descricao`,`valorReal`,`cotacao`,`valorDolar`) VALUES (?,?,?,?,?,?);', [descricao,valorReal,cotacao,valorDolar]);
+      const [rows] = await db.execute('INSERT INTO `conversoes` (`descricao`,`valorReal`,`cotacao`,`valorDolar`) VALUES (?,?,?,?,?,?);', [descricao,valorReal,cotacao, dolar, valorDolar]);
       res.status(201).json({
         id:rows.insertId,
         descricao,

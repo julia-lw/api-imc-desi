@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('./db');
 const app = express()
 const calcularIMC = require('./imc')
+const calcularDolar = require('./conversor')
 const port = 3000
 app.use(express.json())
 
@@ -51,25 +52,24 @@ app.get('/paciente/:id', async (req, res) => {
   }
 })
 
-app.post('/paciente',async(req,res)=>{
-  const {nome,idade,altura,peso}=req.body;
-  if(!nome||!idade||!altura||!peso){
+app.post('/converter',async(req,res)=>{
+  const {descricao,valorReal,cotacao}=req.body;
+  if(!descricao||!valorReal||!cotacao){
       return res.status(400).json({
         mensagem: "Verifique se todos os campos estão preenchidos",
         detalhes: error.message
       });
   }
-  const {imc,status}=calcularIMC(Number(peso),Number(altura));
+
+  const {valorDolar}=calcularDolar(Number(valorReal),Number(cotacao));
   try {
-      const [rows] = await db.execute('INSERT INTO `pacientes` (`nome`, `idade`, `altura`, `peso`, `imc`, `status`) VALUES (?,?,?,?,?,?);', [nome,idade,altura,peso,imc,status]);
+      const [rows] = await db.execute('INSERT INTO `conversoes` (`descricao`,`valorReal`,`cotacao`,`valorDolar`) VALUES (?,?,?,?,?,?);', [descricao,valorReal,cotacao,valorDolar]);
       res.status(201).json({
         id:rows.insertId,
-        nome,
-        idade,
-        altura,
-        peso,
-        imc,
-        status
+        descricao,
+        valorReal,
+        cotacao,
+        valorDolar
       });
   } catch (error) {
     res.status(500).json({

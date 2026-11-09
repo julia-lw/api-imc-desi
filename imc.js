@@ -14,4 +14,9 @@ function calcularIMC(peso, altura) {
     }
     return { imc, status };
 }
+<<<<<<< HEAD
 module.exports = calcularIMC;
+=======
+
+module.exports = calcularIMC;
+>>>>>>> a6593f8379004b734fca9bdc3ef8cdfd30d3410f
